@@ -1,26 +1,37 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environments } from '../../../Environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private seguridadUrl = 'http://localhost:3002/api/token';
-  private clientesUrl = 'http://localhost:3001/api/clientes';
+  private baseUrlGetTokenSecurity = environments.getTokenSecurity;
+  private baseUrlRegisterClient = environments.registerClient;
+  private baseUrlGeValidateToken = environments.validateToken;
 
   constructor(private http: HttpClient) { }
 
-  //* Obtener token de seguridad
-  generarToken(): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(this.seguridadUrl, {});
+  generateToken() {
+    const url = this.baseUrlGetTokenSecurity;
+    return this.http.post<{ token: string }>(`${url}`, {});
   }
 
-  //* Enviar datos del cliente al backend
-  registrarCliente(data: any): Observable<any> {
-    return this.http.post<any>(this.clientesUrl, data);
+  registerClient(clienteData: any) {
+    const url = this.baseUrlRegisterClient;
+    return this.http.post<{ mensaje: string; id: number }>(`${url}`, clienteData);
   }
+
+
+  //*Opcional - Para pruebas
+  validateToken(token: string) {
+    const url = this.baseUrlGeValidateToken;
+    return this.http.post<{ valido: boolean }>(`${url}`, { token });
+  }
+
   
+
 
 }
