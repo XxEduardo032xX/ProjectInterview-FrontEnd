@@ -4,7 +4,6 @@
 *{
     font-family: 'Poppins', sans-serif;
     list-style: none;
-
 }
 
 
@@ -22,9 +21,9 @@
     background-image: url('/assets/ImagesCasino/imageCasino.jpeg');
     background-position: center;
     background-size: cover;
-    background-attachment: fixed;
-    position: relative;
-    z-index: 1;
+    /* background-attachment: fixed; */
+    /* position: relative; */
+    /* z-index: 1; */
 }
 
 
