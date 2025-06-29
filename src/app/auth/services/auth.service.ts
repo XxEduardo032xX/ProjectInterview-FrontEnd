@@ -10,7 +10,7 @@ export class AuthService {
 
   private baseUrlGetTokenSecurity = environments.getTokenSecurity;
   private baseUrlRegisterClient = environments.registerClient;
-  private baseUrlSaveToken = environments.registerClient;
+  private baseUrlSaveToken = environments.saveToken;
   private baseUrlGeValidateToken = environments.validateToken;
 
   constructor(private http: HttpClient) { }
