@@ -127,7 +127,7 @@ export class RegisterPageComponent implements OnInit{
                 selectValue: 'DNI'
               });
 
-              this.bonoSeleccionado = null;
+              this.bonoSeleccionado = 30;
               this.mostrarSegundoFormulario = false;
             },
             error: (err) => {
