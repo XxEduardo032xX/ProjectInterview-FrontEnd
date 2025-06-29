@@ -31,34 +31,35 @@ export class RegisterPageComponent implements OnInit{
   ){}
   
   value: string | undefined;
-  bonoSeleccionado: number | null = null;
+  bonoSeleccionado: number | null = 30;
   mostrarSegundoFormulario = false;
 
 
   ngOnInit(): void {
+  const control = this.myForm.get('documentoNumero');
 
-    this.myForm.get('selectValue')?.valueChanges.subscribe(tipo => {
-    const control = this.myForm.get('documentoNumero');
-
+  this.myForm.get('selectValue')?.valueChanges.subscribe(tipo => {
     if (tipo === 'DNI') {
       control?.setValidators([
         Validators.required,
-        Validators.pattern(/^\d{8}$/) //* Exactamente 8 dígitos
+        Validators.pattern(/^\d{8}$/)
       ]);
-    } 
-    else if (tipo === 'CE') {
+    } else if (tipo === 'CE') {
       control?.setValidators([
-      Validators.required,
-      Validators.pattern(/^[a-zA-Z0-9]{9}$/) //* Ejemplo: alfanumérico 9 caracteres
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z0-9]{9}$/)
       ]);
-    } 
-    else {
+    } else {
       control?.clearValidators();
     }
+    
+    control?.updateValueAndValidity();
+  });
 
-      control?.updateValueAndValidity();
-    });
+    this.myForm.get('selectValue')?.setValue('DNI', { emitEvent: true });
+  
   }
+
 
 
   isValidField(field: string){
@@ -121,7 +122,11 @@ export class RegisterPageComponent implements OnInit{
           this.authService.registerClient(clienteData).subscribe({
             next: (response) => {
               alert('Cliente registrado correctamente. ID: ' + response.id);
-              this.myForm.reset();
+              // this.myForm.reset();
+              this.myForm.reset({
+                selectValue: 'DNI'
+              });
+
               this.bonoSeleccionado = null;
               this.mostrarSegundoFormulario = false;
             },

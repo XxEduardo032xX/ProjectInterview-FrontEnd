@@ -7,34 +7,11 @@ import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 export class ValidatorsService {
 
 
-  public emailPattern: string = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$";
+  public emailPattern: string = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
   public tokenPattern = /^[0-9]{8}$/;
 
 
   constructor() { }
-
-
-  isFieldOneEqualValidateTwo(field1: string, field2:string){
-
-        return ( formGroup: AbstractControl ): ValidationErrors | null => {
-
-            const fieldValue1 = formGroup.get(field1)?.value;
-            const fieldValue2 = formGroup.get(field2)?.value;
-
-            if(fieldValue1 !== fieldValue2){
-                //*Aqui establecemos en el INPUT el error ya que con q un input tenga un error
-                //*todo el formulario se marcara como error:
-                formGroup.get(field2)?.setErrors({notEqual: true});
-
-                //*Esto es el error del formulario:
-                return {notEqual: true}
-            }
-            
-            formGroup.get(field2)?.setErrors(null);
-            return null;
-        }
-
-  }
 
 
   isAdult(control: AbstractControl): ValidationErrors | null {
@@ -50,9 +27,6 @@ export class ValidatorsService {
 
     return realAge >= 18 ? null : { notAdult: true };
   }
-
-
-  
 
 
 
