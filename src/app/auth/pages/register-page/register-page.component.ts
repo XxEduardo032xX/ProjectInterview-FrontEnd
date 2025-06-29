@@ -91,55 +91,60 @@ export class RegisterPageComponent implements OnInit{
 
   //*Guardar la data del formulario si esta bien:
   onSave() {
-    if (this.myForm.invalid) {
-      this.myForm.markAllAsTouched();
-      return;
-    }
+  if (this.myForm.invalid) {
+    this.myForm.markAllAsTouched();
+    return;
+  }
 
-    const token = this.myForm.get('token')?.value;
+  const token = this.myForm.get('token')?.value;
 
-    this.authService.validateToken(token).subscribe({
-      next: (resp) => {
-        if (!resp.valido) {
-          alert('El token no es válido o ya fue utilizado.');
-          return;
-        }
-
-        const clienteData = {
-          documento_tipo: this.myForm.get('selectValue')?.value,
-          documento_numero: this.myForm.get('documentoNumero')?.value,
-          nombres: this.myForm.get('name')?.value,
-          apellidos: this.myForm.get('lastName')?.value,
-          fecha_nacimiento: this.myForm.get('agePerson')?.value,
-          bono_bienvenida: this.bonoSeleccionado,
-          token: this.myForm.get('token')?.value,
-          correo: this.myForm.get('email')?.value
-        };
-
-
-        this.authService.registerClient(clienteData).subscribe({
-          next: (response) => {
-            alert('Cliente registrado correctamente. ID: ' + response.id);
-            this.myForm.reset();
-            this.bonoSeleccionado = null;
-            this.mostrarSegundoFormulario = false;
-          },
-        
-          error: (err) => {
-            console.error('Error al registrar cliente:', err.error);
-            alert('Ocurrió un error al registrar el cliente.');
+  this.authService.saveToken(token).subscribe({
+    next: () => {
+      this.authService.validateToken(token).subscribe({
+        next: (resp) => {
+          if (!resp.valido) {
+            alert('Token inválido o ya fue usado');
+            return;
           }
 
-        });
-      },
-    
-      error: (err) => {
-        console.error('Error al validar token:', err);
-        alert('No se pudo validar el token. Intenta nuevamente.');
+          const clienteData = {
+            documento_tipo: this.myForm.get('selectValue')?.value,
+            documento_numero: this.myForm.get('documentoNumero')?.value,
+            nombres: this.myForm.get('name')?.value,
+            apellidos: this.myForm.get('lastName')?.value,
+            fecha_nacimiento: this.myForm.get('agePerson')?.value,
+            bono_bienvenida: this.bonoSeleccionado,
+            token: token,
+            correo: this.myForm.get('email')?.value
+          };
+
+          this.authService.registerClient(clienteData).subscribe({
+            next: (response) => {
+              alert('Cliente registrado correctamente. ID: ' + response.id);
+              this.myForm.reset();
+              this.bonoSeleccionado = null;
+              this.mostrarSegundoFormulario = false;
+            },
+            error: (err) => {
+              console.error('Error al registrar cliente:', err);
+              alert('Ocurrió un error al registrar el cliente.');
+            }
+          });
+        },
+        error: () => alert('Error validando token')
+      });
+    },
+    error: (err) => {
+      if (err.status === 409) {
+        alert('Este token ya ha sido registrado anteriormente.');
+      } else {
+        console.error('Error guardando token:', err);
+        alert('Error inesperado al guardar el token');
       }
-    });
-  
-  }
+    }
+  });
+}
+
 
 
 
@@ -153,16 +158,16 @@ export class RegisterPageComponent implements OnInit{
       //*Chapa el bono, una vez que chapa el bono generamos el token, luego de generarlo
       //*mostramos el token en el input correspondiente, luego de eso el usuario rellena el formulario
       //*envia los datos, luego de enviarlo se almacena en la base de datos
-
       console.log('Bono a recibir (S/):', this.bonoSeleccionado);
-      this.authService.generateToken().subscribe({
-      next: (resp) => {
-        this.myForm.get('token')?.setValue(resp.token); // Asignamos el token al input
-        this.mostrarSegundoFormulario = true;           // Mostramos el formulario
+
+      this.authService.generateTokenOnly().subscribe({
+        next: (resp) => {
+          this.myForm.get('token')?.setValue(resp.token);
+          this.mostrarSegundoFormulario = true;
       },
         error: (err) => {
-        console.error('Error al generar token:', err);
-      }
+          console.error('Error al generar token:', err);
+      }   
     });
 
     

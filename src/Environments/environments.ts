@@ -2,17 +2,14 @@
 
 
 export const environments = {
-    //*Obtener token de seguridad:
-    getTokenSecurity: ' http://localhost:3002/api/token',
+    //*Tokens de seguridad - Microservicio de seguridad:
+    getTokenSecurity: 'http://localhost:3002/api/token/generar',
+    saveToken: 'http://localhost:3002/api/token/guardar',
 
-    //*Registrar cliente:
+    //*Registrar cliente - Microservicio de cliente:
     registerClient: 'http://localhost:3001/api/clientes',
 
-    //*Validacion del token: 
-    validateToken: 'http://localhost:3002/api/token/validar',
-    /*
-    *El cliente (frontend) no necesita llamar directamente a este endpoint, solo lo hace 
-    *el microservicio de clientes internamente.
-    */
+    //*Validacion del token - Microservicio de seguridad:  
+    validateToken: 'http://localhost:3002/api/token/validar/',
 }
 

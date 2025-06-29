@@ -1,27 +1,57 @@
-# ProjectInterview
+# Proyecto - Sistema de Registro de Clientes con Validación de Token y microservicios con Node Js
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
 
-## Development server
+## Tecnologías
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Backend: Node.js + Express
+Base de datos: MySQL
+Cache: Redis
+Mensajería: RabbitMQ
+Frontend: Angular
+Otros: Bootstrap 5
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Cómo correr el proyecto
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Requisitos previos que se debe de tener antes de correr el proyecto:
 
-## Running unit tests
+Node.js
+MySQL
+Redis
+RabbitMQ
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+Luego de cumplir con los requisitos anteriores, necesita saber que este proyecto usa variables de entorno,
+el cual se ubica en el lado de src/Environments/environments.ts, debera de modificar las rutas http
+que se encuentran en aquellas variables en base a las rutas de los microservicios que se encuentra 
+explicado en el README.MD de aquel proyecto y que usted halla empleado:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Microservicios:
 
-## Further help
+Seguridad - http://localhost:3002
+Clientes - http://localhost:3001
+Correos - http://localhost:3003
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+Endpoints de las variables de entorno:
+
+http://localhost:3002/api/token/generar',
+http://localhost:3002/api/token/guardar',
+http://localhost:3001/api/clientes',
+http://localhost:3002/api/token/validar/',
+
+
+
+Cómo ejecutar:
+
+Primero necesita correr todos los microservicios en el lado del backend (El cual se explica en el proyecto correspondiente), luego de realizar lo anterior debe de correr este proyecto con los siguientes comandos:
+
+npm install
+ng serve
+
+
+
+
+
+
