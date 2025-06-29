@@ -43,6 +43,7 @@ http://localhost:3001/api/clientes',
 http://localhost:3002/api/token/validar',
 
 
+
 Cómo ejecutar:
 
 Primero necesita correr todos los microservicios en el lado del backend (El cual se explica en el proyecto correspondiente), luego de realizar lo anterior debe de correr este proyecto con los siguientes comandos:
