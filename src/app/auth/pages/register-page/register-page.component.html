@@ -1,6 +1,6 @@
-<div class="welcome-container" *ngIf="!mostrarSegundoFormulario">
+<div class="welcome-container container-fluid" *ngIf="!mostrarSegundoFormulario">
   <div class="logo">
-    <img src="../../../../assets/ImagesCasino/logo.jpeg" alt="Logo LaFija" />
+    <img src="/assets/ImagesCasino/logo.jpeg" alt="Logo LaFija" />
   </div>
 
   <h2 class="title">Empieza tu registro</h2>
@@ -14,7 +14,7 @@
     <div class="bonus-info">
       <h3>Apuesta gratis S/30</h3>
     </div>
-    <img src="../../../../assets/ImagesCasino/copa.png" alt="Img copa">
+    <img src="/assets/ImagesCasino/copa.png" alt="Img copa">
   </div>
 
   <!-- BONO 2 -->
@@ -38,7 +38,7 @@
 
 <div class="welcome-container" *ngIf="mostrarSegundoFormulario">
   <div class="logo">
-    <img src="../../../../assets/ImagesCasino/logo.jpeg" alt="Logo LaFija" />
+    <img src="/assets/ImagesCasino/logo.jpeg" alt="Logo LaFija" />
   </div>
     <h2>Regístrate</h2>
     <p class="subtitle">Completa tus datos para continuar</p>
@@ -90,10 +90,11 @@
       <span *ngIf="isValidField('agePerson')" class="error">{{ getFieldError('agePerson') }}</span>
 
       <div class="input-field">
-        <input type="text" id="token" required placeholder=" " formControlName="token">
+        <input type="text" id="token" required placeholder="" formControlName="token">
         <label for="token">Token</label>
       </div>
       <!--AQUI PONES EL SPAN PARA VALIDAR EL TOKEN CAUSA-->
+      <span *ngIf="isValidField('token')" class="error">{{ getFieldError('token') }}</span>
 
       <button type="submit" class="confirm-button">Registrar</button>
     </form>

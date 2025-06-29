@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidatorsService } from '../../../shared/validators/validators.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register-page',
@@ -16,17 +17,24 @@ export class RegisterPageComponent implements OnInit{
     name: ['', [Validators.required, Validators.minLength(3)], []],
     lastName: ['', [Validators.required, Validators.minLength(3)], []],
     selectValue: ['DNI', [Validators.required], []],
+    token: ['', [Validators.required, Validators.pattern(this.validatorsServices.tokenPattern)], []],
     documentoNumero: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.pattern(this.validatorsServices.emailPattern)], []],
     agePerson: ['', [Validators.required, this.validatorsServices.isAdult], []]
   })
 
 
-  constructor(private fb: FormBuilder, private validatorsServices: ValidatorsService){}
+  constructor(
+    private fb: FormBuilder, 
+    private validatorsServices: ValidatorsService,
+    private authService: AuthService
+  ){}
   
   value: string | undefined;
   bonoSeleccionado: number | null = null;
   mostrarSegundoFormulario = false;
+
+
   ngOnInit(): void {
 
     this.myForm.get('selectValue')?.valueChanges.subscribe(tipo => {
@@ -81,14 +89,58 @@ export class RegisterPageComponent implements OnInit{
 
 
 
-  onSave(){
-    
-    if(this.myForm.invalid) {
+  //*Guardar la data del formulario si esta bien:
+  onSave() {
+    if (this.myForm.invalid) {
       this.myForm.markAllAsTouched();
-      return  
-    };
+      return;
+    }
 
+    const token = this.myForm.get('token')?.value;
+
+    this.authService.validateToken(token).subscribe({
+      next: (resp) => {
+        if (!resp.valido) {
+          alert('El token no es válido o ya fue utilizado.');
+          return;
+        }
+
+        const clienteData = {
+          documento_tipo: this.myForm.get('selectValue')?.value,
+          documento_numero: this.myForm.get('documentoNumero')?.value,
+          nombres: this.myForm.get('name')?.value,
+          apellidos: this.myForm.get('lastName')?.value,
+          fecha_nacimiento: this.myForm.get('agePerson')?.value,
+          bono_bienvenida: this.bonoSeleccionado,
+          token: this.myForm.get('token')?.value,
+          correo: this.myForm.get('email')?.value
+        };
+
+
+        this.authService.registerClient(clienteData).subscribe({
+          next: (response) => {
+            alert('Cliente registrado correctamente. ID: ' + response.id);
+            this.myForm.reset();
+            this.bonoSeleccionado = null;
+            this.mostrarSegundoFormulario = false;
+          },
+        
+          error: (err) => {
+            console.error('Error al registrar cliente:', err.error);
+            alert('Ocurrió un error al registrar el cliente.');
+          }
+
+        });
+      },
+    
+      error: (err) => {
+        console.error('Error al validar token:', err);
+        alert('No se pudo validar el token. Intenta nuevamente.');
+      }
+    });
+  
   }
+
 
 
   seleccionarBono(numero: number): void {
@@ -96,9 +148,24 @@ export class RegisterPageComponent implements OnInit{
   }
 
   imprimir(): void {
+    //*Chapa el bono
     if (this.bonoSeleccionado !== null) {
+      //*Chapa el bono, una vez que chapa el bono generamos el token, luego de generarlo
+      //*mostramos el token en el input correspondiente, luego de eso el usuario rellena el formulario
+      //*envia los datos, luego de enviarlo se almacena en la base de datos
+
       console.log('Bono a recibir (S/):', this.bonoSeleccionado);
-      // Aquí puedes ejecutar cualquier otra acción
+      this.authService.generateToken().subscribe({
+      next: (resp) => {
+        this.myForm.get('token')?.setValue(resp.token); // Asignamos el token al input
+        this.mostrarSegundoFormulario = true;           // Mostramos el formulario
+      },
+        error: (err) => {
+        console.error('Error al generar token:', err);
+      }
+    });
+
+    
     } else {
       console.warn('No se ha seleccionado ningún bono');
     }
