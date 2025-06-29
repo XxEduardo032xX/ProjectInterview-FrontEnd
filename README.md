@@ -23,7 +23,8 @@ RabbitMQ
 
 
 Luego de cumplir con los requisitos anteriores, necesita saber que este proyecto usa variables de entorno,
-el cual se ubica en el lado de src/Environments/environments.ts, debera de modificar las rutas http
+el cual se ubica en el lado de src/Environments/environments.ts, se dejaron los archivos "environments.ts"
+para poder facilitar la revision de este proyecto, recuerde que debera de modificar las rutas http
 que se encuentran en aquellas variables en base a las rutas de los microservicios que se encuentra 
 explicado en el README.MD de aquel proyecto y que usted halla empleado:
 
@@ -39,8 +40,7 @@ Endpoints de las variables de entorno:
 http://localhost:3002/api/token/generar',
 http://localhost:3002/api/token/guardar',
 http://localhost:3001/api/clientes',
-http://localhost:3002/api/token/validar/',
-
+http://localhost:3002/api/token/validar',
 
 
 Cómo ejecutar:
@@ -51,7 +51,5 @@ npm install
 ng serve
 
 
-
-
-
+Con respecto a "ng serve", necesita tener Angular CLI previamente instalado, sino lo tiene puede ejecutarlo usando el comando "npm start"
 
